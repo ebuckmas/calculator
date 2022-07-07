@@ -8,11 +8,7 @@ const multiply = (x,y) => x * y;
 
 const divide = (x,y) => x / y;
 
-//operator function that takes in operation to perform plus two numbers
-
-//const operate = (operator, x, y) => operator(x,y);
-
-//create calculator object
+//create calculator object that includes function to return result
 
 const calc = {
     num1: undefined,
@@ -25,21 +21,80 @@ const calc = {
 
 // functions to populate the display
 
+let num1Array = [];
+let num2Array = [];
+let secondaryDispArray = [];
+let solution = undefined;
+let numToString = num => Number(num);
 const primaryDisp = document.getElementById('primaryDisp');
 const secondaryDisp = document.getElementById('secondaryDisp');
 
-//button event listeners
+function ac() {
+    calc.num1 = undefined;
+    calc.num2 = undefined;
+    calc.operator = undefined;
+    primaryDisp.innerText = '';
+    secondaryDisp.innerText = '0';
+    secondaryDispArray = [];
+    num1Array = [];
+    num2Array = [];
+}
+
+function c() {
+    solution = undefined;
+}
+
+function equals() {
+    if (!calc.num2) {
+        calc.num2 = Number(num2Array.map((x) => x).join(''));
+     } 
+    //else if (solution) {
+    //     calc.num1 = solution;
+    //     primaryDisp.innerText = calc.operate(calc.operator,calc.num1,calc.num2);
+    // } else {
+    if ((Number(num2Array.map((x) => x).join(''))) !== calc.num2) {
+        calc.num2 = Number(num2Array.map((x) => x).join(''));
+    }
+    return solution = calc.operate(calc.operator,calc.num1,calc.num2);
+    primaryDisp.innerText = solution;
+    }
+
+
+
+//button activation
 
 const buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
     button.addEventListener('click', () => {
-       let selection = undefined;
-       let solution = undefined;
         switch (button.id) {
-            case 'ac' : break;
-            case 'c' : break;
+            case 'ac' : ac();
+                break;
+            case 'c' : c();
+                break;
             case 'percent' : break;
             case 'divide' : calc.operator = divide;
+                            if (!calc.num1) {
+                                console.log('first if');
+                                calc.num1 = Number(num1Array.map((x) => x).join(''));
+                                //console.log(calc.num1);
+                                secondaryDispArray.push(' / ');
+                                secondaryDisp.innerText = secondaryDispArray.join('');
+                            } else if (calc.num1 && !calc.num2) {
+                                console.log('second if');
+                                calc.num2 = Number(num2Array.map((x) => x).join(''));
+                                //console.log(calc.num2);
+                                secondaryDispArray.push(' / ');
+                                secondaryDisp.innerText = secondaryDispArray.join('');
+                                equals();
+                                calc.num1 = solution;
+                                num1Array = Array.from(String(calc.num1), numToString);
+                                num2Array = [];
+                            }
+                             else if (calc.num1 && calc.num2) {
+                                console.log('third if');
+                                calc.num1 = equals();
+                                console.log(`new calc1 is ${calc.num1}`);
+                            };
                 break;
             case 'multiply' : calc.operator = multiply;
                 break;
@@ -47,10 +102,11 @@ buttons.forEach(button => {
                 break;
             case 'add' : calc.operator = add;
                 break;
-            case 'decimal' : break;
-            case 'equals' : solution = calc.operate(calc.operator,calc.num1,calc.num2);
-                            console.log(solution);
+            case 'equals' : equals();
+                            console.log(calc.num1);
+                            console.log(calc.num2);
                 break;
+            case '.' :
             case '1' :
             case '2' : 
             case '3' :
@@ -60,19 +116,27 @@ buttons.forEach(button => {
             case '7' :
             case '8' :
             case '9' :
-            case '0' : selection = Number(button.id);
-                       primaryDisp.innerText = selection;
-                       if (!calc.num1) {
-                        calc.num1 = selection;
-                        console.log(`num1: ${calc.num1}`);
-                       } else {
-                        calc.num2 = selection;
-                        console.log(`num2: ${calc.num2}`);
-                       }
+            case '0' : if (calc.operator && calc.num1) {
+                secondaryDispArray.push(button.id);
+                num2Array.push(button.id);
+                secondaryDisp.innerText = secondaryDispArray.join('');
+            } else {
+            secondaryDispArray.push(button.id)
+            num1Array.push(button.id);
+            secondaryDisp.innerText = secondaryDispArray.join('');
+            }
+                    
                 break;
             
         }
-        //return selection;
+       
     });
 });
 
+
+//user enters numbers, stored as an array
+//once an operator is selected, current array is converted to a num, is stored in num1 (copied to object as num1??)
+//when another number is entered, start a new number storage
+//if another operator is selected, run the calc with the two existing numbers and store the result as num1
+    //the new number is stored as num2
+//when equals is selected, run the most recent operator on num1 and num2, and return the result
