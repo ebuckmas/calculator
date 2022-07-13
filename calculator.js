@@ -25,6 +25,7 @@ let num1Array = [];
 let num2Array = [];
 let secondaryDispArray = [];
 let solution = undefined;
+let rounded = undefined;
 let numToString = num => Number(num);
 const primaryDisp = document.getElementById('primaryDisp');
 const secondaryDisp = document.getElementById('secondaryDisp');
@@ -33,7 +34,7 @@ function ac() {
     calc.num1 = undefined;
     calc.num2 = undefined;
     calc.operator = undefined;
-    primaryDisp.innerText = '';
+    primaryDisp.innerText = '0';
     secondaryDisp.innerText = '0';
     secondaryDispArray = [];
     num1Array = [];
@@ -47,21 +48,21 @@ function c() {
 function equals() {
     if (!calc.num2) {
         calc.num2 = Number(num2Array.map((x) => x).join(''));
-     } 
-    //else if (solution) {
-    //     calc.num1 = solution;
-    //     primaryDisp.innerText = calc.operate(calc.operator,calc.num1,calc.num2);
-    // } else {
+    }
     if ((Number(num2Array.map((x) => x).join(''))) !== calc.num2) {
         calc.num2 = Number(num2Array.map((x) => x).join(''));
     }
     solution = calc.operate(calc.operator,calc.num1,calc.num2);
-    primaryDisp.innerText = solution;
+    if (solution == Infinity) {
+        primaryDisp.innerText = 'NO DIVIDE BY ZERO';
+    } else if (solution !== Infinity) {
+    rounded = Math.round((solution + Number.EPSILON) * 100) / 100;
+    primaryDisp.innerText = rounded;
     return solution;
     }
+};
 
-function operatorPress(buttonid, operator) {
-    
+function operatorPress(buttonid, operator) {    
     if (!calc.num1) {
         console.log('first if');
         calc.operator = operator;
@@ -85,7 +86,6 @@ function operatorPress(buttonid, operator) {
         console.log('third if');
         calc.num1 = equals();
         calc.operator = operator;
-        console.log(`new calc1 is ${calc.num1}`);
         console.log(calc);
         num1Array = Array.from(String(calc.num1), numToString);
         num2Array = [];
@@ -105,51 +105,27 @@ buttons.forEach(button => {
                 break;
             case 'c' : c();
                 break;
-            case ' % ' : break;
-            case ' / ' : //calc.operator = divide;
-                         operatorPress(button.id, divide);
-                            // if (!calc.num1) {
-                            //     console.log('first if');
-                            //     calc.num1 = Number(num1Array.map((x) => x).join(''));
-                            //     //console.log(calc.num1);
-                            //     secondaryDispArray.push(button.id);
-                            //     secondaryDisp.innerText = secondaryDispArray.join('');
-                            // } else if (calc.num1 && !calc.num2) {
-                            //     console.log('second if');
-                            //     calc.num2 = Number(num2Array.map((x) => x).join(''));
-                            //     //console.log(calc.num2);
-                            //     secondaryDispArray.push(button.id);
-                            //     secondaryDisp.innerText = secondaryDispArray.join('');
-                            //     equals();
-                            //     calc.num1 = solution;
-                            //     num1Array = Array.from(String(calc.num1), numToString);
-                            //     num2Array = [];
-                            // } else if (calc.num1 && calc.num2) {
-                            //     console.log('third if');
-                            //     calc.num1 = equals();
-                            //     console.log(`new calc1 is ${calc.num1}`);
-                            //     num1Array = Array.from(String(calc.num1), numToString);
-                            //     num2Array = [];
-                            //     secondaryDispArray.push(button.id);
-                            //     secondaryDisp.innerText = secondaryDispArray.join('');
-                            // };
+            case ' / ' : operatorPress(button.id, divide);
                 break;
-            case ' x ' : //calc.operator = multiply;
-                         operatorPress(button.id, multiply);
+            case ' x ' : operatorPress(button.id, multiply);
                 break;
-            case ' - ' : //calc.operator = subtract;
-                         operatorPress(button.id, subtract);
+            case ' - ' : operatorPress(button.id, subtract);
                 break;
-            case ' + ' : //calc.operator = add;
-                         operatorPress(button.id, add);
+            case ' + ' : operatorPress(button.id, add);
                 break;
-            case ' = ' : equals();
-                            console.log(calc.num1);
-                            console.log(calc.operator);
-                            console.log(calc.num2);
-                            console.log(solution);
+            case ' = ' :  
+                    
+                    if (num1Array.length == 0 || num2Array.length == 0) {
+                        console.log('ERROR');
+                        primaryDisp.innerText = 'ERROR';              
+                        } 
+                    equals();
+                    console.log(calc.num1);
+                    console.log(calc.operator);
+                    console.log(calc.num2);
+                    console.log(solution);
                 break;
-            case '.' :
+            case '.' :                
             case '1' :
             case '2' : 
             case '3' :
@@ -160,21 +136,103 @@ buttons.forEach(button => {
             case '8' :
             case '9' :
             case '0' : 
-                if (calc.num1) {
-                    secondaryDispArray.push(button.id);
-                    num2Array.push(button.id);
-                    secondaryDisp.innerText = secondaryDispArray.join('');
-                } else {
+
+                if (!calc.num1) {
+                    if (num1Array.filter(x => x == '.').length == 1 && button.id === '.') {
+                        break;
+                    }
                     secondaryDispArray.push(button.id)
                     num1Array.push(button.id);
                     secondaryDisp.innerText = secondaryDispArray.join('');
-            }
-                    
-                break;
-            
-        }
-       
+                } else {
+                    if (num2Array.filter(x => x == '.').length == 1 && button.id === '.') {
+                        break;
+                    }
+                    secondaryDispArray.push(button.id);
+                    num2Array.push(button.id);
+                    secondaryDisp.innerText = secondaryDispArray.join('');
+                }
+           
+           
+                //     if (calc.num1) {
+            //         secondaryDispArray.push(button.id);
+            //         num2Array.push(button.id);
+            //         secondaryDisp.innerText = secondaryDispArray.join('');
+            //     } else {
+            //         secondaryDispArray.push(button.id)
+            //         num1Array.push(button.id);
+            //         secondaryDisp.innerText = secondaryDispArray.join('');
+            // }                    
+                break;            
+        }       
     });
+});
+
+const keydown = document.addEventListener('keydown', (e) => {
+    console.log(e);
+    switch (e.key) {
+        case 'Delete' : ac();
+            break;
+        case 'c' : c();
+            break;
+        case '/' : operatorPress(e.key, divide);
+            break;
+        case 'x' : operatorPress(e.key, multiply);
+            break;
+        case '-' : operatorPress(e.key, subtract);
+            break;
+        case '+' : operatorPress(e.key, add);
+            break;
+        case '=' :  
+                if (num1Array.length == 0 || num2Array.length == 0) {
+                    console.log('ERROR');
+                    primaryDisp.innerText = 'ERROR';              
+                    } 
+                equals();
+                console.log(calc.num1);
+                console.log(calc.operator);
+                console.log(calc.num2);
+                console.log(solution);
+        case 'Enter' : 
+                if (num1Array.length == 0 || num2Array.length == 0) {
+                    console.log('ERROR');
+                    primaryDisp.innerText = 'ERROR';              
+                    } 
+                equals();
+                console.log(calc.num1);
+                console.log(calc.operator);
+                console.log(calc.num2);
+                console.log(solution);5+5
+            break;
+        case '.' :                
+        case '1' :
+        case '2' : 
+        case '3' :
+        case '4' :
+        case '5' :
+        case '6' :
+        case '7' :
+        case '8' :
+        case '9' :
+        case '0' : 
+
+            if (!calc.num1) {
+                if (num1Array.filter(x => x == '.').length == 1 && e.key === '.') {
+                    break;
+                }
+                secondaryDispArray.push(e.key)
+                num1Array.push(e.key);
+                secondaryDisp.innerText = secondaryDispArray.join('');
+            } else {
+                if (num2Array.filter(x => x == '.').length == 1 && e.key === '.') {
+                    break;
+                }
+                secondaryDispArray.push(e.key);
+                num2Array.push(e.key);
+                secondaryDisp.innerText = secondaryDispArray.join('');
+            }
+            break;
+        }
 });
 
 
