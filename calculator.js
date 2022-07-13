@@ -41,10 +41,6 @@ function ac() {
     num2Array = [];
 }
 
-function c() {
-    solution = undefined;
-}
-
 function equals() {
     if (!calc.num2) {
         calc.num2 = Number(num2Array.map((x) => x).join(''));
@@ -103,7 +99,7 @@ buttons.forEach(button => {
         switch (button.id) {
             case 'ac' : ac();
                 break;
-            case 'c' : c();
+            case 'c' : ac();
                 break;
             case ' / ' : operatorPress(button.id, divide);
                 break;
@@ -151,33 +147,26 @@ buttons.forEach(button => {
                     secondaryDispArray.push(button.id);
                     num2Array.push(button.id);
                     secondaryDisp.innerText = secondaryDispArray.join('');
-                }
-           
-           
-                //     if (calc.num1) {
-            //         secondaryDispArray.push(button.id);
-            //         num2Array.push(button.id);
-            //         secondaryDisp.innerText = secondaryDispArray.join('');
-            //     } else {
-            //         secondaryDispArray.push(button.id)
-            //         num1Array.push(button.id);
-            //         secondaryDisp.innerText = secondaryDispArray.join('');
-            // }                    
+                }       
                 break;            
         }       
     });
 });
+
+//keyboard activation
 
 const keydown = document.addEventListener('keydown', (e) => {
     console.log(e);
     switch (e.key) {
         case 'Delete' : ac();
             break;
-        case 'c' : c();
+        case 'c' : ac();
             break;
         case '/' : operatorPress(e.key, divide);
             break;
         case 'x' : operatorPress(e.key, multiply);
+            break;
+        case '*' : operatorPress(e.key, multiply);
             break;
         case '-' : operatorPress(e.key, subtract);
             break;

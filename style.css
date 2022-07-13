@@ -1,0 +1,75 @@
+.main {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;    
+}
+
+.calculator {
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+.buttons {
+    padding: 3px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 3px;
+    
+}
+
+.row1 {
+    display: flex;
+    gap: 2px;
+    
+}
+
+#ac {
+    flex: 1;
+    
+}
+
+.row2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2px;
+}
+
+.row3 {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+}
+
+.row4 {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+}
+
+.row5 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2px;
+}
+
+.equals {
+    flex: 1;
+}
+
+.btn {
+
+}
